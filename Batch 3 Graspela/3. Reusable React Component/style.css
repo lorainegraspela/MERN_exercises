@@ -1,0 +1,129 @@
+//  mixins/component.scss
+@mixin Component($component, $namespace: ""){
+  @if $namespace == "" {
+    .#{$component} {
+      @content;
+    } 
+  }
+  @else {
+    .#{$namespace}-#{$component} {
+      @content;
+    } 
+  }
+}
+
+@function className($componentName, $namespace: "") {
+  @if $namespace == "" {
+    @return "." + $componentName;
+  }
+  @else {
+    @return "." + $namespace + "-" + $componentName;
+  }
+}
+
+#{className(Tests, "ns")} {
+  background: red;
+  &-sub#{className(Xyz, "ns")} {
+    color: white;
+  }
+}
+
+// mixins/accordion.scss
+@mixin Accordion($namespace: "", $text-size: 1rem, $border: 0.1em solid black) {
+  @include Component(Accordion, $namespace) {
+    font-size: $text-size;
+    border: $border;
+    box-sizing: border-box;
+    &-title { }
+    &-caret { }
+    &-content { }
+    &-content.is-collapsed {
+      display: none;
+    }
+    @content;
+  }
+}
+
+@mixin content($margin: auto, $padding: auto, $color: inherit) {
+  padding: $padding;
+  margin: $margin;
+  color: $color;
+  @content
+}
+
+// mixins/title.scss
+@mixin title(
+  $text-color: inherit,
+  $background: inherit,
+  $font-size: inherit,
+  $font-weight: bold,
+  $margin: inherit,
+  $padding: inherit
+  ) {
+  color: $text-color;
+  background: $background;
+  font-size: $font-size;
+  font-weight: bold;
+  margin: $margin;
+  padding: $padding;
+   
+  @content;
+}
+
+// mixins/caret.scss
+@mixin caret($size: 1em, $color: black, $margin: auto, $float: none) {
+  margin: $margin;
+  float: $float;
+  @include caretShape($size, $color);
+  @content;
+}
+
+@mixin caretShape($caret-size: 1em, $caret-color: black) {
+    border-left: $caret-size solid transparent;
+    border-right: $caret-size solid transparent;
+    &.is-upArrow {
+      border-bottom: $caret-size solid $caret-color;
+    }
+    &.is-downArrow {
+      border-top: $caret-size solid $caret-color;
+    }
+}
+
+// ./default/_variables.scss
+$namespace: "";
+$base-color: black;
+$title-background-color: #cccccc;
+$title-text-color: $base-color;
+
+// ./default/_accordion.scss
+// @import "./varaibles";
+// @import "./caretShape";
+@include Accordion($namespace, 1rem, 0.1em solid $base-color) {
+  &-title {
+    @include title($title-text-color, $title-background-color, 1.2em, bold, 0, 0.3em)
+  }
+  &-caret {
+    @include caret(1em, $base-color, -1.8em 1em 0 0, right);
+  }
+  &-content {
+    @include content(0.3em, 0, $base-color);
+  }
+}
+
+// ./default/_app.scss
+// @import "./default/varaibles";
+// @import "./default/accordion;
+
+@mixin DemoApp($namespace: "") {
+  @include Component(App, $namespace) {
+    &-accordion.Accordion { }
+    @content;
+  }
+}
+
+@include DemoApp($namespace) {
+  &-accordion.Accordion {
+    width: 50%;
+    margin: 0.5em auto;
+  }
+}

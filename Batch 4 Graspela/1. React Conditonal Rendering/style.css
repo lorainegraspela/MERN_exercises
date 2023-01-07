@@ -1,0 +1,38 @@
+#app {
+    height: 100%;
+    width: 100%;
+    background: gainsboro;
+  }
+  
+  #react-application {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .controls {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .controls > button {
+    padding: 20px;
+    margin: 20px 40px;
+    background: linear-gradient(to right bottom, steelblue, rgba(100, 0, 0, 1));
+    color: ghostwhite;
+    font-size: 24px;
+  }
+  
+  .conditional-render-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .img-wrapper img {
+    height: 80vh;
+  }
+  
+  .conditional-render-section p {
+    color: gray
+  }
